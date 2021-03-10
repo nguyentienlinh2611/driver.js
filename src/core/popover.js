@@ -1,14 +1,14 @@
 import Element from './element';
 import {
-  CLASS_BTN_DISABLED,
-  CLASS_CLOSE_BTN,
-  CLASS_CLOSE_ONLY_BTN,
+  // CLASS_BTN_DISABLED,
+  CLASS_CLOSE_BTN, CLASS_CURRENT_STEP,
+  // CLASS_CLOSE_ONLY_BTN,
   CLASS_NEXT_STEP_BTN,
   CLASS_POPOVER_DESCRIPTION,
   CLASS_POPOVER_FOOTER,
   CLASS_POPOVER_TIP,
   CLASS_POPOVER_TITLE,
-  CLASS_PREV_STEP_BTN,
+  CLASS_PREV_STEP_BTN, CLASS_TOTAL_STEP,
   ID_POPOVER,
   POPOVER_HTML,
 } from '../common/constants';
@@ -66,6 +66,8 @@ export default class Popover extends Element {
     this.nextBtnNode = popover.querySelector(`.${CLASS_NEXT_STEP_BTN}`);
     this.prevBtnNode = popover.querySelector(`.${CLASS_PREV_STEP_BTN}`);
     this.closeBtnNode = popover.querySelector(`.${CLASS_CLOSE_BTN}`);
+    this.currentStepNode = popover.querySelector(`.${CLASS_CURRENT_STEP}`);
+    this.totalStepNode = popover.querySelector(`.${CLASS_TOTAL_STEP}`);
   }
 
   /**
@@ -194,7 +196,8 @@ export default class Popover extends Element {
   renderFooter() {
     this.nextBtnNode.innerHTML = this.options.nextBtnText;
     this.prevBtnNode.innerHTML = this.options.prevBtnText;
-    this.closeBtnNode.innerHTML = this.options.closeBtnText;
+    this.currentStepNode.innerHTML = this.options.currentIndex + 1;
+    this.totalStepNode.innerHTML = (this.options.totalCount === 0) ? 1 : this.options.totalCount;
 
     const hasSteps = this.options.totalCount && this.options.totalCount !== 1;
 
@@ -209,20 +212,18 @@ export default class Popover extends Element {
     if (!hasSteps) {
       this.nextBtnNode.style.display = 'none';
       this.prevBtnNode.style.display = 'none';
-      this.closeBtnNode.classList.add(CLASS_CLOSE_ONLY_BTN);
+      // this.closeBtnNode.classList.add(CLASS_CLOSE_ONLY_BTN);
     } else {
       // @todo modify CSS to use block
       this.nextBtnNode.style.display = 'inline-block';
       this.prevBtnNode.style.display = 'inline-block';
-      this.closeBtnNode.classList.remove(CLASS_CLOSE_ONLY_BTN);
+      // this.closeBtnNode.classList.remove(CLASS_CLOSE_ONLY_BTN);
     }
 
-    this.footerNode.style.display = 'block';
+    this.footerNode.style.display = 'flex';
     if (this.options.isFirst) {
-      this.prevBtnNode.classList.add(CLASS_BTN_DISABLED);
+      this.prevBtnNode.style.display = 'none';
       this.nextBtnNode.innerHTML = this.options.startBtnText;
-    } else {
-      this.prevBtnNode.classList.remove(CLASS_BTN_DISABLED);
     }
 
     if (this.options.isLast) {
